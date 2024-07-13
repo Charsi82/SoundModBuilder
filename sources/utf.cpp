@@ -148,23 +148,23 @@ std::string UTF8FromString(const std::wstring& s)
 	return res;
 }
 
-std::string ConvertFromUTF8(std::string_view s, int codePage) {
-	if (codePage == CP_UTF8) {
-		return s.data();
-	}
-	else {
-		std::wstring sWide = StringFromUTF8(s.data());
-		int len = static_cast<int>(sWide.length());
-		int cchMulti = ::WideCharToMultiByte(codePage, 0, sWide.c_str(), len, NULL, 0, NULL, NULL);
-		std::string ret(static_cast<size_t>(cchMulti) + 1, 0);
-		::WideCharToMultiByte(codePage, 0, sWide.c_str(), len, ret.data(), cchMulti + 1, NULL, NULL);
-		return ret;
-	}
-}
+//std::string ConvertFromUTF8(std::string_view s, int codePage) {
+//	if (codePage == CP_UTF8) {
+//		return std::string(s);
+//	}
+//	else {
+//		std::wstring sWide = StringFromUTF8(s.data());
+//		int len = static_cast<int>(sWide.length());
+//		int cchMulti = ::WideCharToMultiByte(codePage, 0, sWide.c_str(), len, NULL, 0, NULL, NULL);
+//		std::string ret(static_cast<size_t>(cchMulti) + 1, 0);
+//		::WideCharToMultiByte(codePage, 0, sWide.c_str(), len, ret.data(), cchMulti + 1, NULL, NULL);
+//		return ret;
+//	}
+//}
 
 std::string ConvertToUTF8(std::string_view s, int codePage) {
 	if (codePage == CP_UTF8) {
-		return s.data();
+		return std::string(s);
 	}
 	else {
 		const char* original = s.data();

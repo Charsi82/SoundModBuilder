@@ -253,7 +253,7 @@ struct CFileName
 {
 	bool used = false;
 	std::string name;
-	CFileName(const std::string& fn) : name(fn) {};
+	explicit CFileName(const std::string& fn) : name(fn) {};
 };
 
 class CEvtData
@@ -321,8 +321,7 @@ class CModXml
 	std::vector<CFileName> list_fn;
 
 public:
-	explicit CModXml(const std::string& name) : m_modname(name) {};
-	bool init()
+	explicit CModXml(const std::string& name) : m_modname(name)
 	{
 		std::stringstream data_ini{ data };
 		std::string line;
@@ -346,15 +345,14 @@ public:
 				std::getline(tmp, cl.prefix, ',');
 				while (tmp.good())
 				{
-					std::string name;
-					std::getline(tmp, name, ',');
+					std::string param_name;
+					std::getline(tmp, param_name, ',');
 					std::string value;
 					std::getline(tmp, value, ',');
-					cl.m_slist.emplace_back(name, value);
+					cl.m_slist.emplace_back(param_name, value);
 				}
 			}
 		}
-		return true;
 	}
 
 	bool write(const std::string& prefix, const std::string& path)
@@ -381,7 +379,7 @@ public:
 			std::remove_if(
 				list_fn.begin(),
 				list_fn.end(),
-				[](auto& item) { return item.used; }),
+				[](const auto& item) { return item.used; }),
 			list_fn.end());
 		if (list_fn.size())
 		{
@@ -452,7 +450,7 @@ int main(int argc, char* argv[])
 	print_string(std::format("*** Версия игры: {} ***", game_ver));
 
 	CModXml mod_xml(opts.get_mod_name());
-	if (!mod_xml.init()) return quit(1);
+	//if (!mod_xml.init()) return quit(1);
 
 	print_string("*** Переименование исходных файлов ***");
 	for (auto const& dir_entry : fs::directory_iterator(fs::path(opts.get_src_path())))
